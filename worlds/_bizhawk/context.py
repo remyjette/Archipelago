@@ -6,6 +6,7 @@ checking or launching the client, otherwise it will probably cause circular impo
 import asyncio
 import enum
 import subprocess
+import sys
 from typing import Any, Dict, Optional
 
 from CommonClient import CommonContext, ClientCommandProcessor, get_base_parser, server_loop, logger, gui_enabled
@@ -247,7 +248,7 @@ def launch() -> None:
     async def main():
         parser = get_base_parser()
         parser.add_argument("patch_file", default="", type=str, nargs="?", help="Path to an Archipelago patch file")
-        args = parser.parse_args()
+        args = parser.parse_args([arg for arg in sys.argv[1:] if arg != "BizHawkClient"])
 
         ctx = BizHawkClientContext(args.connect, args.password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
